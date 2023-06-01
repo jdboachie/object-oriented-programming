@@ -25,7 +25,6 @@ double exponent(double base, int power)
 	for (int i = 0; i < power; i++)
 	{
 		result *= base;
-		std::cout << result << "->";
 	}
 	std::cout << "Result: " << result << std::endl;
 	return result;
