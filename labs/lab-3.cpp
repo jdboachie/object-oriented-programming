@@ -17,6 +17,12 @@ int main()
     std::cin >> cm;
     std::cout << "Your height in feet is " << cm / 30.48 << std::endl;
 
+    std::cout << "3. Fibonacci Sequence" << std::endl;
+    int fib;
+    std::cout << "Enter a number: ";
+    std::cin >> fib;
+    std::cout << "The " << fib << "th number in the Fibonacci sequence is " << fibonacci(fib) << std::endl;
+
     return 0;
 }
 
@@ -28,4 +34,13 @@ int sum_to_n(int n)
         res += i;
     }
     return res;
+}
+
+int fibonacci(int n)
+{
+    if (n <= 1)
+    {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
 }
