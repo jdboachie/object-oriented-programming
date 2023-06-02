@@ -2,6 +2,7 @@
 
 int sum_to_n(int n);
 int fibonacci(int n);
+void generateFibonacciSequence(int n);
 
 int main()
 {
@@ -21,7 +22,7 @@ int main()
     int fib;
     std::cout << "Enter a number: ";
     std::cin >> fib;
-    std::cout << "The " << fib << "th number in the Fibonacci sequence is " << fibonacci(fib) << std::endl;
+    generateFibonacciSequence(fib);
 
     return 0;
 }
@@ -43,4 +44,13 @@ int fibonacci(int n)
         return n;
     }
     return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+void generateFibonacciSequence(int n)
+{
+    for (int i = 1; i < n; i ++)
+    {
+        std::cout << fibonacci(i) << " -> ";
+    }
+    std::cout << fibonacci(n) << std::endl;
 }
