@@ -10,7 +10,7 @@ The repository is structured as follows:
 
 * Projects
 
-* Contributions: You can submit their own examples, projects, or improvements to existing code. Encourage contributors to follow the guidelines in the ![CONTRIBUTING.md](https://github.com/jdboachie/object-oriented-programming/blob/main/CONTRIBUTING.md) file when making contributions.
+* Contributions: You can submit their own examples, projects, or improvements to existing code. Encourage contributors to follow the guidelines in the [CONTRIBUTING.md](https://github.com/jdboachie/object-oriented-programming/blob/main/CONTRIBUTING.md) file when making contributions.
 Feel free to create additional directories or modify the existing structure based on your specific needs.
 
 ## Getting Started
