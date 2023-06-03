@@ -21,6 +21,12 @@ int main()
     savingsAccount->withdraw(1000);
     savingsAccount->displayBalance();
 
+    std::cout << "Checking Account" << std::endl;
+    CheckingAccount* checkingAccount = new CheckingAccount("123456789", 1000, "John Doe");
+    checkingAccount->displayBalance();
+    checkingAccount->deposit(100);
+
+
     Bank *bank = new Bank();
     bank->addAccount(account);
     return 0;

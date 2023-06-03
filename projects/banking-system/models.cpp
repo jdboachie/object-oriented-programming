@@ -53,6 +53,7 @@ class SavingsAccount: public BankAccount
 
         void displayBalance() override
         {
+            BankAccount::displayBalance();
             std::cout << "Interest Rate: " << interestRate << std::endl;
         }
 
