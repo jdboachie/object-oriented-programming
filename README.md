@@ -19,7 +19,6 @@ To get started with this repository, follow these steps:
 1. Clone the repository to your local machine using the following command:
 
 ```bash
-Copy code
 git clone https://github.com/jdboachie/object-oriented-programming.git
 ```
 
