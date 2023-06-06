@@ -1,173 +1,200 @@
 #include <iostream>
+#include <random>
 
 class BankAccount
 {
-    private:
-        double balance;
-    
-    public:
-        std::string name;
-        std::string accountNumber;
-        
-        BankAccount(std::string accountNumber, double balance, std::string name)
-        {
-            this->accountNumber = accountNumber;
-            this->balance = balance;
-            this->name = name;
-        }
-        
-        void deposit(double amount)
-        {
-            balance += amount;
-        }
+private:
+    double balance;
 
-        virtual void withdraw(double amount)
-        {
-            if (balance - amount < 0)
-            {
-                std::cout << "Insufficient funds" << std::endl;
-            }
-            else
-            {
-                balance -= amount;
-            }
-        }
+public:
+    std::string name;
+    std::string accountNumber;
 
-        virtual void displayBalance()
+    BankAccount(std::string accountNumber, double balance, std::string name)
+    {
+        this->accountNumber = accountNumber;
+        this->balance = balance;
+        this->name = name;
+    }
+
+    void deposit(double amount)
+    {
+        balance += amount;
+    }
+
+    virtual void withdraw(double amount)
+    {
+        if (balance - amount < 0)
         {
-            std::cout << "Account Number: " << accountNumber << std::endl;
-            std::cout << "Balance: " << balance << std::endl;
+            std::cout << "[ERROR] Insufficient funds" << std::endl;
         }
+        else
+        {
+            balance -= amount;
+        }
+    }
+
+    virtual void displayBalance()
+    {
+        std::cout << "Account Number: " << accountNumber << std::endl;
+        std::cout << "Balance: " << balance << std::endl;
+    }
 };
 
-class SavingsAccount: public BankAccount
+class SavingsAccount : public BankAccount
 {
-    private:
-        double interestRate;
-    
-    public:
-        SavingsAccount(std::string accountNumber, double balance, std::string name, double interestRate): BankAccount(accountNumber, balance, name)
-        {
-            this->interestRate = interestRate;
-        }
+private:
+    double interestRate;
 
-        void displayBalance() override
-        {
-            BankAccount::displayBalance();
-            std::cout << "Interest Rate: " << interestRate << std::endl;
-        }
+public:
+    SavingsAccount(std::string accountNumber, double balance, std::string name, double interestRate) : BankAccount(accountNumber, balance, name)
+    {
+        this->interestRate = interestRate;
+    }
 
+    void displayBalance() override
+    {
+        BankAccount::displayBalance();
+        std::cout << "[INFO] Interest Rate: " << interestRate << std::endl;
+    }
 };
 
-class CheckingAccount: public BankAccount
+class CheckingAccount : public BankAccount
 {
-    private:
-        double transactionLimit;
-    
-    public:
-        CheckingAccount(std::string accountNumber, double balance, std::string name): BankAccount(accountNumber, balance, name)
+private:
+    double transactionLimit;
+
+public:
+    CheckingAccount(std::string accountNumber, double balance, std::string name) : BankAccount(accountNumber, balance, name)
+    {
+        this->transactionLimit = 10000;
+    }
+
+    void withdraw(double amount) override
+    {
+        if (amount > transactionLimit)
         {
-            this->transactionLimit = 10000;
+            std::cout << "[ERROR] Transaction limit exceeded" << std::endl;
         }
-
-        void withdraw (double amount) override
+        else
         {
-            if (amount > transactionLimit)
-            {
-                std::cout << "Transaction limit exceeded" << std::endl;
-            }
-            else
-            {
-                BankAccount::withdraw(amount);
-            }
-        };
-
+            BankAccount::withdraw(amount);
+        }
+    };
 };
 
 class Bank
 {
-    private:
-        BankAccount** accounts;
-    
-    public:
-        Bank()
-        {
-            accounts = new BankAccount*[10];
-        }
+private:
+    BankAccount **accounts;
+    int population = 0;
 
-        void addAccount(BankAccount* account)
+public:
+    Bank()
+    {
+        accounts = new BankAccount *[10];
+    }
+
+    void addAccount(BankAccount *account)
+    {
+        population++;
+        for (int i = 0; i < population; i++)
         {
-            for (int i = 0; i < sizeof(accounts); i++)
+            if (accounts[i] == NULL)
             {
-                if (accounts[i] == NULL)
-                {
-                    accounts[i] = account;
-                    break;
-                }
+                accounts[i] = account;
+                break;
             }
         }
+    }
 
-        void createAccount()
+    void createAccount()
+    {
+        std::string accountNumber;
+        std::string name;
+        double balance = 0;
+
+        std::cout << "[PROMPT] Enter your name: ";
+        std::getline(std::cin, name);
+        std::cout << "[PROMPT] Enter initial deposit: ";
+        std::cin >> balance;
+        accountNumber = generateAccountNumber();
+
+        // Create a new BankAccount object
+        BankAccount *account = new BankAccount(accountNumber, balance, name);
+        addAccount(account);
+    }
+
+    static std::string generateAccountNumber()
+    {
+        std::random_device rd;
+        std::mt19937 generator(rd());
+        std::uniform_int_distribution<int> distribution(10000000, 99999999);
+        int randomNumber = distribution(generator);
+        return "ACC" + std::to_string(randomNumber);
+    }
+
+    void displayAllAccounts()
+    {
+        std::cout << "[INFO] All accounts" << std::endl;
+        for (int i = 0; i < population; i++)
         {
-            std::string accountNumber;
-            std::string name;
-            double balance = 0;
-
-            std::cout << "Enter your name: ";
-            std::cin >> name;
-            std::cout << "Enter account number: ";
-            std::cin >> accountNumber;
-
-            // Create a new BankAccount object
-            BankAccount* account = new BankAccount(accountNumber, balance, name);
+            accounts[i]->displayBalance();
         }
+        std::cout << "[INFO] End of accounts" << std::endl;
+    }
 
-        void displayAllAccounts()
+    bool findAccount(std::string accountNumber, bool verbose = false)
+    {
+        for (int i = 0; i < population; i++)
         {
-            for (int i = 0; i < sizeof(accounts); i++)
+            if (accounts[i]->accountNumber == accountNumber)
             {
-                accounts[i]->displayBalance();
-            }
-        }
-
-        void findAccount(std::string accountNumber)
-        {
-            for (int i = 0; i < sizeof(accounts); i++)
-            {
-                if (accounts[i]->accountNumber == accountNumber)
+                if (verbose)
                 {
                     accounts[i]->displayBalance();
                 }
+                return true;
             }
         }
+        return false;
+    }
 
-        void performTransaction()
+    void performTransaction()
+    {
+        std::string accountNumber;
+        std::cout << "[PROMPT] Enter account number: ";
+        std::cin >> accountNumber;
+
+        if (!findAccount(accountNumber, true))
         {
-            std::string accountNumber;
-            std::cout << "Enter account number: ";
-            std::cin >> accountNumber;
+            std::cout << "[ERROR] Account not found" << std::endl;
+            return;
+        }
 
-            std::string transactionType;
-            std::cout << "Enter transaction. Type (deposit/withdraw): ";
-            std::cin >> transactionType;
+        std::string transactionType;
+        std::cout << "[PROMPT] Enter transaction. Type (deposit/withdraw): ";
+        std::cin >> transactionType;
 
-            double amount;
-            std::cout << "Enter amount: ";
-            std::cin >> amount;
+        double amount;
+        std::cout << "[PROMPT] Enter amount: ";
+        std::cin >> amount;
 
-            for (int i = 0; i < sizeof(accounts); i++)
+        for (int i = 0; i < population; i++)
+        {
+            if (accounts[i]->accountNumber == accountNumber)
             {
-                if (accounts[i]->accountNumber == accountNumber)
+                if (transactionType == "deposit")
                 {
-                    if (transactionType == "deposit")
-                    {
-                        accounts[i]->deposit(amount);
-                    }
-                    else if (transactionType == "withdraw")
-                    {
-                        accounts[i]->withdraw(amount);
-                    }
+                    accounts[i]->deposit(amount);
+                    std::cout << "[INFO] Deposited " << amount << " to " << accounts[i]->accountNumber << std::endl;
+                }
+                else if (transactionType == "withdraw")
+                {
+                    accounts[i]->withdraw(amount);
+                    std::cout << "[INFO] Withdrew " << amount << " from " << accounts[i]->accountNumber << std::endl;
                 }
             }
         }
+    }
 };
