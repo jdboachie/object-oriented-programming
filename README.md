@@ -1,17 +1,8 @@
-# COE254 - Object-Oriented Programming with C++
+# Object-Oriented Programming with C++
 
 ## Introduction
 
 Object-Oriented Programming (OOP) is a fundamental programming paradigm that emphasizes the use of objects and classes to structure and organize code. This repository contains my code for the OOP course taught by Professor Theresa-Samuelle Adjaidoo, and it also encourages contributions from others interested in object-oriented programming with C++.
-
-## Repository Structure
-
-The repository is structured as follows:
-
-* Projects
-
-* Contributions: You can submit their own examples, projects, or improvements to existing code. Encourage contributors to follow the guidelines in the [CONTRIBUTING.md](https://github.com/jdboachie/object-oriented-programming/blob/main/CONTRIBUTING.md) file when making contributions.
-Feel free to create additional directories or modify the existing structure based on your specific needs.
 
 ## Getting Started
 To get started with this repository, follow these steps:
