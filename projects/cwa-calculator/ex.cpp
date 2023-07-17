@@ -1,9 +1,39 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <sstream>
+#include <cstdlib>
 #include <map>
 
 using namespace std;
+
+
+class Utils
+{
+public:
+	static void userValidateInput()
+	{
+		while (true)
+		{
+			cout << "Is this information correct? (y/n) ";
+			char confirm;
+			cin >> confirm;
+			if (confirm == 'n')
+			{
+				cout << "Please restart the program and enter the correct information.\n";
+				exit(0);
+			}
+			else if (confirm != 'y')
+			{
+				cout << "Invalid input\n";
+			}
+			cin.ignore(); // Ignore the newline character left by cin
+			break;
+		}
+	}
+	
+	// A lot of other things to validate.
+};
 
 class Grade
 {
@@ -55,7 +85,7 @@ private:
 	string name;
 	string id;
 	unsigned int numCourses;
-	float CWA;
+	double CWA;
 	float weightedScore;
 	float totalWeight;
 	map<string, Grade> scores;
@@ -117,31 +147,31 @@ public:
 	void show()
 	{
 		cout << setw(26) << "STUDENT INFO" << endl;
-		cout << "-----------------------------------------" << endl;
-		cout << "|" << setw(20) << "ID: " << id << "     \t|" << endl;
-		cout << "|" << setw(20) << "Name: " << name << "\t|" << endl;
-		cout << "|" << setw(20) << "Courses: " << numCourses << "\t        \t|" << endl;
-		cout << "-----------------------------------------" << endl;
+		cout << "------------------------------------------" << endl;
+		cout << "|" << setw(20) << "ID: " << setw(20) << id << "|" << endl;
+		cout << "|" << setw(20) << "Name: " << setw(20) << name << "|" << endl;
+		cout << "|" << setw(20) << "Courses: " << setw(20) << numCourses << "|" << endl;
+		cout << "------------------------------------------" << endl;
 
 		cout << setw(23) << "SCORES" << endl;
-		cout << "-----------------------------------------" << endl;
+		cout << "------------------------------------------" << endl;
 		for (const auto &pair : scores)
 		{
 			const Grade &grade = pair.second;
-			cout << "|" << setw(20) << "CourseID: " << grade.getCourseID() << "        \t|" << endl;
-			cout << "|" << setw(20) << "Course name: " << grade.getCourseName() << "        \t|" << endl;
-			cout << "|" << setw(20) << "Score: " << grade.getScore() << "          \t|" << endl;
-			cout << "|" << setw(20) << "Weight: " << grade.getWeight() << "           \t|" << endl;
-			cout << "|" << setw(20) << "Weighted score: " << grade.getWeightedScore() << "         \t|" << endl;
-			cout << "-----------------------------------------" << endl;
+			cout << "|" << setw(20) << "CourseID: " << setw(20) << grade.getCourseID() << "|" << endl;
+			cout << "|" << setw(20) << "Course name: " << setw(20) << grade.getCourseName() << "|" << endl;
+			cout << "|" << setw(20) << "Score: " << setw(20) << grade.getScore() << "|" << endl;
+			cout << "|" << setw(20) << "Weight: " << setw(20) << grade.getWeight() << "|" << endl;
+			cout << "|" << setw(20) << "Weighted score: " << setw(20) << grade.getWeightedScore() << "|" << endl;
+			cout << "------------------------------------------" << endl;
 		}
 
 		cout << setw(23) << "SUMMARY" << endl;
-		cout << "-----------------------------------------" << endl;
-		cout << "|" << setw(20) << "TotalWeightedScore: " << this->weightedScore << "        \t|" << endl;
-		cout << "|" << setw(20) << "TotalWeight: " << this->totalWeight << "             \t|" << endl;
-		cout << "|" << setw(20) << "CWA: " << this->CWA << "        \t|" << endl;
-		cout << "-----------------------------------------" << endl;
+		cout << "------------------------------------------" << endl;
+		cout << "|" << setw(20) << "TotalWeightedScore: " << setw(20) << this->weightedScore << "|" << endl;
+		cout << "|" << setw(20) << "TotalWeight: " << setw(20) << this->totalWeight << "|" << endl;
+		cout << "|" << setw(20) << "CWA: " << setw(20) << this->CWA << "|" << endl;
+		cout << "------------------------------------------" << endl;
 	}
 };
 
@@ -149,6 +179,7 @@ class CWACalculator
 {
 private:
 	Student *student;
+	double CWA;
 	float totalWeightedScore = 0;
 	unsigned int totalWeight = 0;
 
@@ -165,7 +196,8 @@ public:
 			this->totalWeightedScore += grade.getWeightedScore();
 			this->totalWeight += grade.getWeight();
 		}
-		return this->totalWeightedScore / this->totalWeight;
+		this->CWA = this->totalWeightedScore / this->totalWeight;
+		return CWA;
 	}
 
 	float getTotalWeightScore()
@@ -181,20 +213,61 @@ public:
 
 int main()
 {
-	// TEST (main function will be developed later)
-	Student student("Nathaniel Kwakye", "123456", 3);
-	CWACalculator calculator(&student);
+    // Input student information
+    string name, id;
+    unsigned int numCourses;
 
-	map<string, Grade> userInputedScores; // Dictionary of scores
-	userInputedScores["C++"] = Grade("C++", "IT002", 87, 3);
-	userInputedScores["Java"] = Grade("Java", "IT003", 71, 2);
-	userInputedScores["Python"] = Grade("Python", "IT005", 76, 4);
-	userInputedScores["Bilibili"] = Grade("Bilibili", "IT006", 71, 2);
-	userInputedScores["Tuday"] = Grade("Tuday", "IT007", 76, 4);
+    cout << "Student name:\t";
+    getline(cin, name);
 
-	student.setScores(userInputedScores);
-	student.setCWA(calculator.getCWA());
-	student.setWeightedScore(calculator.getTotalWeightScore());
-	student.setTotalWeight(calculator.getTotalWeight());
-	student.show();
+    cout << "Student ID:\t";
+    getline(cin, id);
+
+    cout << "No of courses:\t";
+    cin >> numCourses;
+
+	Utils::userValidateInput();
+	system("cls");
+
+    // Create student object
+    Student student(name, id, numCourses);
+    CWACalculator calculator(&student);
+
+    // Input grades for each course
+    map<string, Grade> userInputedScores; // Dictionary of scores
+
+
+	cout << endl << "*********** ! ***********" << endl;
+
+	cout << "Enter course information.\nFormat:\n\n\tcoursename courseID score weight\n\n(Remember not to add spaces between the courseName and courseID)\nEg. OOP COE254 80 3\n\n";
+	cout << "*************************" << endl << endl;
+
+    for (unsigned int i = 0; i < numCourses; i++)
+    {
+        string courseInput;
+        cout << "Enter course " << i + 1 << " information: ";
+        getline(cin, courseInput);
+
+        istringstream iss(courseInput);
+        string courseName, courseID;
+        float score;
+        unsigned int weight;
+
+        // Extract course information from the input line
+        iss >> courseName >> courseID >> score >> weight;
+
+        userInputedScores[courseName] = Grade(courseName, courseID, score, weight);
+    }
+
+	// Clear the screen
+	system("cls");
+
+	// Calculate CWA
+    student.setScores(userInputedScores);
+    student.setCWA(calculator.getCWA());
+    student.setWeightedScore(calculator.getTotalWeightScore());
+    student.setTotalWeight(calculator.getTotalWeight());
+    student.show();
+
+    return 0;
 }
