@@ -26,12 +26,13 @@ public:
 			else if (confirm != 'y')
 			{
 				cout << "Invalid input\n";
+				continue;
 			}
 			cin.ignore(); // Ignore the newline character left by cin
 			break;
 		}
 	}
-	
+
 	// A lot of other things to validate.
 };
 
@@ -85,7 +86,7 @@ private:
 	string name;
 	string id;
 	unsigned int numCourses;
-	double CWA;
+	float CWA;
 	float weightedScore;
 	float totalWeight;
 	map<string, Grade> scores;
@@ -213,28 +214,29 @@ public:
 
 int main()
 {
-    // Input student information
-    string name, id;
-    unsigned int numCourses;
+	start:
+	// Input student information
+	string name, id;
+	unsigned int numCourses;
 
-    cout << "Student name:\t";
-    getline(cin, name);
+	cout << "Student name:\t";
+	getline(cin, name);
 
-    cout << "Student ID:\t";
-    getline(cin, id);
+	cout << "Student ID:\t";
+	getline(cin, id);
 
-    cout << "No of courses:\t";
-    cin >> numCourses;
+	cout << "No of courses:\t";
+	cin >> numCourses;
 
 	Utils::userValidateInput();
 	system("cls");
 
-    // Create student object
-    Student student(name, id, numCourses);
-    CWACalculator calculator(&student);
+	// Create student object
+	Student student(name, id, numCourses);
+	CWACalculator calculator(&student);
 
-    // Input grades for each course
-    map<string, Grade> userInputedScores; // Dictionary of scores
+	// Input grades for each course
+	map<string, Grade> userInputedScores; // Dictionary of scores
 
 
 	cout << endl << "*********** ! ***********" << endl;
@@ -242,32 +244,32 @@ int main()
 	cout << "Enter course information.\nFormat:\n\n\tcoursename courseID score weight\n\n(Remember not to add spaces between the courseName and courseID)\nEg. OOP COE254 80 3\n\n";
 	cout << "*************************" << endl << endl;
 
-    for (unsigned int i = 0; i < numCourses; i++)
-    {
-        string courseInput;
-        cout << "Enter course " << i + 1 << " information: ";
-        getline(cin, courseInput);
+	for (unsigned int i = 0; i < numCourses; i++)
+	{
+		string courseInput;
+		cout << "Enter course " << i + 1 << " information: ";
+		getline(cin, courseInput);
 
-        istringstream iss(courseInput);
-        string courseName, courseID;
-        float score;
-        unsigned int weight;
+		istringstream iss(courseInput);
+		string courseName, courseID;
+		float score;
+		unsigned int weight;
 
-        // Extract course information from the input line
-        iss >> courseName >> courseID >> score >> weight;
+		// Extract course information from the input line
+		iss >> courseName >> courseID >> score >> weight;
 
-        userInputedScores[courseName] = Grade(courseName, courseID, score, weight);
-    }
+		userInputedScores[courseName] = Grade(courseName, courseID, score, weight);
+	}
 
 	// Clear the screen
 	system("cls");
 
 	// Calculate CWA
-    student.setScores(userInputedScores);
-    student.setCWA(calculator.getCWA());
-    student.setWeightedScore(calculator.getTotalWeightScore());
-    student.setTotalWeight(calculator.getTotalWeight());
-    student.show();
+	student.setScores(userInputedScores);
+	student.setCWA(calculator.getCWA());
+	student.setWeightedScore(calculator.getTotalWeightScore());
+	student.setTotalWeight(calculator.getTotalWeight());
+	student.show();
 
-    return 0;
+	return 0;
 }
