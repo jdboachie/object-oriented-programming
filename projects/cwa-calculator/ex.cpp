@@ -3,18 +3,91 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 #include <map>
 
 using namespace std;
 
-
 class Utils
 {
 public:
+
+	static void waitStart()
+	{
+		cout << "\033[44m"; // Set the text color to red
+		cout << "Press enter to continue...";
+		cin.get();
+		cout << "\033[0m"; // Reset the color to the default
+		system("cls");
+	}
+
+	static void splash()
+	{
+		const char *asciiArt = R"(
+			 __ .  ..__.   __ .__..    __ .  ..   .__..___..__..__
+			/  `|  |[__]  /  `[__]|   /  `|  ||   [__]  |  |  |[__)
+			\__.|/\||  |  \__.|  ||___\__.|__||___|  |  |  |__||  \
+		)";
+
+		cout << asciiArt << endl;
+	}
+
+	static void waitAnimation()
+	{
+		// cout << "\033[44m"; // Set the text color to red
+		// Define the loading animation frames
+		const char *loadingFrames[] = {"-", "\\", "|", "/"};
+		const int numFrames = sizeof(loadingFrames) / sizeof(loadingFrames[0]);
+
+		// Define the duration for each frame in milliseconds
+		const int frameDuration = 150;
+
+		// Define the number of iterations for the loading animation
+		const int numIterations = 25;
+
+		// Display the loading screen
+		for (int i = 0; i < numIterations; ++i)
+		{
+			std::cout << loadingFrames[i % numFrames] << "          ";
+			std::cout.flush(); // Flush the output to ensure immediate display
+			std::this_thread::sleep_for(std::chrono::milliseconds(frameDuration));
+			// Move the cursor back to the beginning of the line
+			std::cout << "\r";
+		}
+
+		cout << "\033[0m"; // Reset the color to the default
+	}
+
+	static void loadingAnimation()
+	{
+		cout << "\033[44m"; // Set the bg color to blue
+
+		for (int i = 0; i <= 100; i++)
+		{
+			cout << " ";
+			cout.flush();
+			this_thread::sleep_for(chrono::milliseconds(10));
+		}
+		cout << "\n\n\n";
+		cout << "\033[0m"; // Reset the color to the default
+	}
+
+	template<typename T>
+	static bool isValidType(const T& value)
+	{
+		if (typeid(value) == typeid(unsigned int) || typeid(value) == typeid(float) || typeid(value) == typeid(double) || typeid(value) == typeid(int))
+		{
+			return true;
+		}
+		return false;
+	}
+
 	static void userValidateInput()
 	{
 		while (true)
 		{
+			cout << "\033[41m"; // Set the background color to magenta
 			cout << "Is this information correct? (y/n) ";
 			char confirm;
 			cin >> confirm;
@@ -23,14 +96,56 @@ public:
 				cout << "Please restart the program and enter the correct information.\n";
 				exit(0);
 			}
-			else if (confirm != 'y')
+			else if ((confirm != 'y') && (confirm != 'Y'))
 			{
 				cout << "Invalid input\n";
 				continue;
 			}
-			cin.ignore(); // Ignore the newline character left by cin
+			cin.ignore();	   // Ignore the newline character left by cin
+			cout << "\033[0m"; // Reset the color to the default
 			break;
 		}
+	}
+
+	static bool isValidScore(float score)
+	{
+		if (score < 0 || score > 100)
+		{
+			cout << "Invalid score. Please enter a score between 0 and 100.\n";
+			return false;
+		}
+		return true;
+	}
+
+	static bool isValidWeight(unsigned int weight)
+	{
+		if (weight < 1 || weight > 4)
+		{
+			cout << "Invalid weight. Please enter a weight between 1 and 4.\n";
+			return false;
+		}
+		return true;
+	}
+
+	static bool isValidCourseCount(unsigned int numCourses)
+	{
+		if (numCourses < 1)
+		{
+			cout << "Invalid number of courses. Please enter a number greater than 0.\n";
+			return false;
+		}
+		return true;
+	}
+
+	static void courseInputInfo()
+	{
+		cout << "\033[34m"; // Set the text color to blue
+		cout << endl
+			 << "********************** ! **********************" << endl;
+		cout << "Enter course information.\nFormat:\n\ncoursename courseID score weight\n\n(Remember not to add spaces between the courseName and courseID)\nEg. OOP COE254 80 3\n";
+		cout << "***********************************************" << endl
+			 << endl;
+		cout << "\033[0m"; // Reset the color to the default
 	}
 
 	// A lot of other things to validate.
@@ -48,10 +163,50 @@ private:
 public:
 	Grade() = default; // Default constructor
 
-	Grade(string courseName, string courseID, float score, unsigned int weight)
-		: courseName(courseName), courseID(courseID), score(score), weight(weight)
+	void setCourseName(string courseName)
 	{
-		this->weightedScore = score * weight;
+		this->courseName = courseName;
+	}
+
+	void setCourseID(string courseID)
+	{
+		this->courseID = courseID;
+	}
+
+	void setWeightedScore(float weightedScore)
+	{
+		if (Utils::isValidType(weightedScore))
+		{
+			this->weightedScore = weightedScore;
+		}
+		else
+		{
+			cout << "\033[41m"; // Set the background color to magenta
+			cout << "Invalid type. Please enter a valid type.\n";
+			cout << "\033[0m"; // Reset the color to the default
+		}
+	}
+
+	void setScore(float score)
+	{
+		if (Utils::isValidType(score) && Utils::isValidScore(score))
+		{
+			this->score = score;
+		}
+	}
+
+	void setWeight(unsigned int weight)
+	{
+		if (Utils::isValidType(weight) && Utils::isValidWeight(weight))
+		{
+			this->weight = weight;
+		}
+		else
+		{
+			cout << "\033[41m"; // Set the background color to magenta
+			cout << "Invalid weight. Please enter a valid weight.\n";
+			cout << "\033[0m"; // Reset the color to the default
+		}
 	}
 
 	unsigned int getWeight() const
@@ -147,14 +302,15 @@ public:
 
 	void show()
 	{
-		cout << setw(26) << "STUDENT INFO" << endl;
+		cout << "\033[37m";
+		cout << setw(26) << "STUDENT INFO" << setw(16) << " " << endl;
 		cout << "------------------------------------------" << endl;
 		cout << "|" << setw(20) << "ID: " << setw(20) << id << "|" << endl;
 		cout << "|" << setw(20) << "Name: " << setw(20) << name << "|" << endl;
 		cout << "|" << setw(20) << "Courses: " << setw(20) << numCourses << "|" << endl;
 		cout << "------------------------------------------" << endl;
 
-		cout << setw(23) << "SCORES" << endl;
+		cout << setw(23) << "SCORES" << setw(19) << " " << endl;
 		cout << "------------------------------------------" << endl;
 		for (const auto &pair : scores)
 		{
@@ -167,12 +323,13 @@ public:
 			cout << "------------------------------------------" << endl;
 		}
 
-		cout << setw(23) << "SUMMARY" << endl;
+		cout << setw(23) << "SUMMARY" << setw(19) << " " << endl;
 		cout << "------------------------------------------" << endl;
 		cout << "|" << setw(20) << "TotalWeightedScore: " << setw(20) << this->weightedScore << "|" << endl;
 		cout << "|" << setw(20) << "TotalWeight: " << setw(20) << this->totalWeight << "|" << endl;
 		cout << "|" << setw(20) << "CWA: " << setw(20) << this->CWA << "|" << endl;
 		cout << "------------------------------------------" << endl;
+		cout << "\033[0m"; // Reset the color to the default
 	}
 };
 
@@ -214,10 +371,14 @@ public:
 
 int main()
 {
+	Utils::waitStart();
+	Utils::splash();
+	Utils::loadingAnimation();
+	cout << "\033[0m"; // Reset the color to the default
 	start:
 	// Input student information
 	string name, id;
-	unsigned int numCourses;
+	string numCourses;
 
 	cout << "Student name:\t";
 	getline(cin, name);
@@ -226,25 +387,23 @@ int main()
 	getline(cin, id);
 
 	cout << "No of courses:\t";
-	cin >> numCourses;
+	getline(cin, numCourses);
+	int num = stoi(numCourses);
+	Utils::isValidCourseCount(num);
 
 	Utils::userValidateInput();
-	system("cls");
+	// system("cls");
 
 	// Create student object
-	Student student(name, id, numCourses);
+	Student student(name, id, num);
 	CWACalculator calculator(&student);
 
 	// Input grades for each course
 	map<string, Grade> userInputedScores; // Dictionary of scores
 
+	Utils::courseInputInfo();
 
-	cout << endl << "*********** ! ***********" << endl;
-
-	cout << "Enter course information.\nFormat:\n\n\tcoursename courseID score weight\n\n(Remember not to add spaces between the courseName and courseID)\nEg. OOP COE254 80 3\n\n";
-	cout << "*************************" << endl << endl;
-
-	for (unsigned int i = 0; i < numCourses; i++)
+	for (unsigned int i = 0; i < num; i++)
 	{
 		string courseInput;
 		cout << "Enter course " << i + 1 << " information: ";
@@ -258,18 +417,31 @@ int main()
 		// Extract course information from the input line
 		iss >> courseName >> courseID >> score >> weight;
 
-		userInputedScores[courseName] = Grade(courseName, courseID, score, weight);
+		userInputedScores[courseName] = Grade();
+		userInputedScores[courseName].setCourseName(courseName);
+		userInputedScores[courseName].setCourseID(courseID);
+		userInputedScores[courseName].setScore(score);
+		userInputedScores[courseName].setWeight(weight);
+		userInputedScores[courseName].setWeightedScore(score * weight);
 	}
 
-	// Clear the screen
-	system("cls");
+	Utils::userValidateInput();
 
 	// Calculate CWA
+
+	Utils::waitAnimation();
+	// Clear the screen
+	system("cls");
 	student.setScores(userInputedScores);
 	student.setCWA(calculator.getCWA());
 	student.setWeightedScore(calculator.getTotalWeightScore());
 	student.setTotalWeight(calculator.getTotalWeight());
 	student.show();
 
+	cout << "------------------- :) -----------------" << endl;
+	cout << "|                                      |" << endl;
+	cout << "| Thanks for using our CWA Calculator! |" << endl;
+	cout << "|                                      |" << endl;
+	cout << "----------------------------------------" << endl;
 	return 0;
 }
