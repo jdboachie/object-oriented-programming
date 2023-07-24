@@ -15,15 +15,17 @@ public:
 
 	static void waitStart()
 	{
-		cout << "\033[44m"; // Set the text color to red
+		cout << "\033[44m"; // Set the BG TO BLUE
 		cout << "Press enter to continue...";
 		cin.get();
+
 		cout << "\033[0m"; // Reset the color to the default
-		system("cls");
+		system("clear");
 	}
 
 	static void splash()
 	{
+		cout << "\033[0m"; // Reset the color to the default
 		const char *asciiArt = R"(
 			 __ .  ..__.   __ .__..    __ .  ..   .__..___..__..__
 			/  `|  |[__]  /  `[__]|   /  `|  ||   [__]  |  |  |[__)
@@ -301,7 +303,7 @@ public:
 
 	void show()
 	{
-		cout << "\033[37m";
+		cout << "\033[43m";
 		cout << setw(26) << "STUDENT INFO" << setw(16) << " " << endl;
 		cout << "------------------------------------------" << endl;
 		cout << "|" << setw(20) << "ID: " << setw(20) << id << "|" << endl;
@@ -370,12 +372,15 @@ public:
 
 int main()
 {
-	system("cls");
+	system("clear");
+	cout << "\033[0m"; // Reset the color to the default
 	Utils::waitStart();
 	Utils::splash();
 	Utils::loadingAnimation();
 	cout << "\033[0m"; // Reset the color to the default
+
 	start:
+	cout << "\033[0m"; // Reset the color to the default
 	// Input student information
 	string name, id;
 	string numCourses;
@@ -389,9 +394,33 @@ int main()
 	cout << "No of courses:\t";
 	getline(cin, numCourses);
 	int num = stoi(numCourses);
-	Utils::isValidCourseCount(num);
 
-	Utils::userValidateInput();
+	if (!Utils::isValidCourseCount(num))
+	{
+		goto start;
+	};
+
+	// Utils::userValidateInput();
+	while (true)
+	{
+		cout << "\033[41m"; // Set the background color to magenta
+		cout << "Is this information correct? (y/n) ";
+		cout << "\033[0m"; // Reset the color to the default
+		char confirm;
+		cin >> confirm;
+		if (confirm == 'n')
+		{
+			goto start;
+			exit(0);
+		}
+		else if ((confirm != 'y') && (confirm != 'Y'))
+		{
+			cout << "Invalid input\n";
+			continue;
+		}
+		cin.ignore();	   // Ignore the newline character left by cin
+		break;
+	}
 	// system("cls");
 
 	// Create student object
@@ -427,11 +456,9 @@ int main()
 
 	Utils::userValidateInput();
 
-	// Calculate CWA
-
 	Utils::waitAnimation();
 	// Clear the screen
-	system("cls");
+	system("clear");
 	student.setScores(userInputedScores);
 	student.setCWA(calculator.getCWA());
 	student.setWeightedScore(calculator.getTotalWeightScore());
