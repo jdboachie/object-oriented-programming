@@ -35,7 +35,6 @@ public:
 
 	static void waitAnimation()
 	{
-		// cout << "\033[44m"; // Set the text color to red
 		// Define the loading animation frames
 		const char *loadingFrames[] = {"-", "\\", "|", "/"};
 		const int numFrames = sizeof(loadingFrames) / sizeof(loadingFrames[0]);
@@ -61,13 +60,13 @@ public:
 
 	static void loadingAnimation()
 	{
-		cout << "\033[44m"; // Set the bg color to blue
+		cout << "\033[42m"; // Set the bg color to blue
 
 		for (int i = 0; i <= 100; i++)
 		{
 			cout << " ";
 			cout.flush();
-			this_thread::sleep_for(chrono::milliseconds(10));
+			this_thread::sleep_for(chrono::milliseconds(7));
 		}
 		cout << "\n\n\n";
 		cout << "\033[0m"; // Reset the color to the default
@@ -89,6 +88,7 @@ public:
 		{
 			cout << "\033[41m"; // Set the background color to magenta
 			cout << "Is this information correct? (y/n) ";
+			cout << "\033[0m"; // Reset the color to the default
 			char confirm;
 			cin >> confirm;
 			if (confirm == 'n')
@@ -102,7 +102,6 @@ public:
 				continue;
 			}
 			cin.ignore();	   // Ignore the newline character left by cin
-			cout << "\033[0m"; // Reset the color to the default
 			break;
 		}
 	}
@@ -371,6 +370,7 @@ public:
 
 int main()
 {
+	system("cls");
 	Utils::waitStart();
 	Utils::splash();
 	Utils::loadingAnimation();
@@ -438,10 +438,6 @@ int main()
 	student.setTotalWeight(calculator.getTotalWeight());
 	student.show();
 
-	cout << "------------------- :) -----------------" << endl;
-	cout << "|                                      |" << endl;
-	cout << "| Thanks for using our CWA Calculator! |" << endl;
-	cout << "|                                      |" << endl;
-	cout << "----------------------------------------" << endl;
+	cout << "|  Thanks for using our CWA Calculator! :)" << endl;
 	return 0;
 }
