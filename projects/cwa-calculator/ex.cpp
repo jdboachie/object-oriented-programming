@@ -20,7 +20,7 @@ public:
 		cin.get();
 
 		cout << "\033[0m"; // Reset the color to the default
-		system("clear");
+		system("cls");
 	}
 
 	static void splash()
@@ -303,7 +303,7 @@ public:
 
 	void show()
 	{
-		cout << "\033[43m";
+		// cout << "\033[34m";
 		cout << setw(26) << "STUDENT INFO" << setw(16) << " " << endl;
 		cout << "------------------------------------------" << endl;
 		cout << "|" << setw(20) << "ID: " << setw(20) << id << "|" << endl;
@@ -330,7 +330,7 @@ public:
 		cout << "|" << setw(20) << "TotalWeight: " << setw(20) << this->totalWeight << "|" << endl;
 		cout << "|" << setw(20) << "CWA: " << setw(20) << this->CWA << "|" << endl;
 		cout << "------------------------------------------" << endl;
-		cout << "\033[0m"; // Reset the color to the default
+		// cout << "\033[0m"; // Reset the color to the default
 	}
 };
 
@@ -372,7 +372,7 @@ public:
 
 int main()
 {
-	system("clear");
+	system("cls");
 	cout << "\033[0m"; // Reset the color to the default
 	Utils::waitStart();
 	Utils::splash();
@@ -458,13 +458,13 @@ int main()
 
 	Utils::waitAnimation();
 	// Clear the screen
-	system("clear");
+	system("cls");
 	student.setScores(userInputedScores);
 	student.setCWA(calculator.getCWA());
 	student.setWeightedScore(calculator.getTotalWeightScore());
 	student.setTotalWeight(calculator.getTotalWeight());
 	student.show();
 
-	cout << "|  Thanks for using our CWA Calculator! :)" << endl;
+	cout << "\n|  Thanks for using our CWA Calculator! :)" << endl;
 	return 0;
 }
