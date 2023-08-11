@@ -1,17 +1,19 @@
 #include <iostream>
 #include <list>
 
+using namespace std;
+
 class YoutubeChannel
 {
 
 private:
     int SubscriberCount;
-    std::string Name;
-    std::string OwnerName;
-    std::list<std::string> PublishedVideoTitles;
+    string Name;
+    string OwnerName;
+    list<string> PublishedVideoTitles;
 
 public:
-    YoutubeChannel(std::string name, std::string ownerName)
+    YoutubeChannel(string name, string ownerName)
     {
         Name = name;
         OwnerName = ownerName;
@@ -20,22 +22,22 @@ public:
 
     void GetInfo()
     {
-        std::cout << "Name: " << Name << std::endl;
-        std::cout << "Owner Name: " << OwnerName << std::endl;
-        std::cout << "Number of Subscribers: " << SubscriberCount << std::endl;
-        std::cout << "Videos: " << std::endl;
-        for (std::string videoTitle : PublishedVideoTitles)
+        cout << "Name: " << Name << endl;
+        cout << "Owner Name: " << OwnerName << endl;
+        cout << "Number of Subscribers: " << SubscriberCount << endl;
+        cout << "Videos: " << endl;
+        for (string videoTitle : PublishedVideoTitles)
         {
-            std::cout << videoTitle << std::endl;
+            cout << videoTitle << endl;
         }
     }
 
     void GetName()
     {
-        std::cout << Name << std::endl;
+        cout << Name << endl;
     }
 
-    void SetName(std::string name)
+    void SetName(string name)
     {
         Name = name;
     }
@@ -50,7 +52,7 @@ public:
         SubscriberCount ? SubscriberCount-- : SubscriberCount = 0;
     }
 
-    void PublishVideo(std::string title)
+    void PublishVideo(string title)
     {
         PublishedVideoTitles.push_back(title);
     }
