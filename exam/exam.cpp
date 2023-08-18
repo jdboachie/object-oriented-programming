@@ -357,7 +357,7 @@ public:
 int main()
 {
 	ProperFraction f1(1, 2);
-	ProperFraction f2(5, 3); // Counterintuitive but it's a proper fraction
+	ProperFraction f2(5, 3); // Counterintuitive but just trust me :)
 	ImproperFraction f3(3, 4, 2);
 	ImproperFraction f4(5, 3);
 
@@ -386,9 +386,9 @@ int main()
 		 << f2.toDecimal() << endl
 		 << "h. "
 		 << f3.toDecimal() << endl
-		 << "i. On point!" << endl;
+		 << "i. On (decimal) point!" << endl;
 
-	// 0 for success
+	// No bugs yayy!
 	return 0;
 }
 
